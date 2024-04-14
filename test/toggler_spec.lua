@@ -2,12 +2,12 @@ local toggler = require('toggler')
 
 -- Helper function to simulate setting up buffers and commands
 local function setup_buffer_and_command(command_cfg)
-  vim.cmd('enew') -- Ensure a clean buffer
-  vim.bo[0].filetype = 'markdown' -- Set filetype
-  vim.bo[0].buftype = 'nofile' -- Avoid issues with file types
+  vim.cmd('enew')                               -- Ensure a clean buffer
+  vim.bo[0].filetype = 'markdown'               -- Set filetype
+  vim.bo[0].buftype = 'nofile'                  -- Avoid issues with file types
   vim.cmd('file ' .. command_cfg.name .. '.md') -- Unique file name for each test
 
-  toggler.setup({ command_cfg }) -- Setup command configuration
+  toggler.setup({ command_cfg })                -- Setup command configuration
 end
 
 describe('Toggler Plugin', function()
@@ -33,8 +33,8 @@ describe('Toggler Plugin', function()
 
   describe('Toggler Plugin with Different Events', function()
     local test_cases = {
-      { event = "BufRead", name = "BufReadEvent" },
-      { event = "BufEnter", name = "BufEnterEvent" },
+      { event = "BufRead",     name = "BufReadEvent" },
+      { event = "BufEnter",    name = "BufEnterEvent" },
       { event = "TextChanged", name = "TextChangedEvent" }
     }
 
@@ -49,19 +49,19 @@ describe('Toggler Plugin', function()
         }
 
         setup_buffer_and_command(command_cfg)
-        
+
         -- Enable the command
         toggler.toggle_command(command_cfg)
         assert.is_true(toggler.toggle_states[test_case.name], "Command should be enabled")
 
         -- Properly simulate the event
         if test_case.event == "BufRead" then
-          vim.cmd('edit!') -- Reload the buffer to simulate BufRead
+          vim.cmd('edit!')                              -- Reload the buffer to simulate BufRead
         elseif test_case.event == "BufEnter" then
-          vim.cmd('bunload!') -- Unload buffer
+          vim.cmd('bunload!')                           -- Unload buffer
           vim.cmd('edit ' .. test_case.name .. '.test') -- Re-enter buffer
         elseif test_case.event == "TextChanged" then
-          vim.cmd('normal! i ') -- Simulate text change
+          vim.cmd('normal! i ')                         -- Simulate text change
         end
 
         -- Verify the state remains correctly enabled
