@@ -1,24 +1,32 @@
 # Toggler.nvim
 
-This plugin provides a flexible way to dynamically toggle commands in Neovim, such as linters or formatters, based on user-configurable keybindings and events. It's especially useful for developers who need to quickly enable or disable tools without leaving their editor environment.
+This plugin provides a flexible way to dynamically toggle commands in Neovim,
+For example, on markdown files we might want to have a linter running on
+`BufWritePost` such as `vale`, but running it every time might be too much.
+`Toggler.nvim` provides an easy configurable way to register commands that can
+be toggled on/off with a key binding.
 
 ## Installation
 
 ### Using vim-plug
 
 ```vim
-Plug 'yourusername/toggler.nvim'
+Plug 'Piotr1215/toggler.nvim'
 ```
 
 ### Using packer.nvim
 
 ```lua
-use 'yourusername/toggler.nvim'
+use 'Piotr1215/toggler.nvim'
 ```
 
 ## Usage
 
-To toggle a tool, configure your `init.lua` to set up the specific commands you want to toggle along with their associated keybindings and optional events. Here’s how to set it up:
+To toggle a command, configure your `init.lua` to set up the specific commands
+you want to toggle along with their associated keybindings and optional events,
+when the commands should be triggered. Here’s how to set it up:
+
+> The plugin does not create commands, they must be available before toggling.
 
 ### Basic Configuration
 
@@ -42,6 +50,7 @@ require('toggler').setup({
 ```
 
 This configuration will:
+
 - Toggle Vale on Markdown files with `<leader>vl` on buffer write post.
 - Toggle ESLint on JavaScript files with `<leader>el` on text changes.
 
@@ -73,6 +82,9 @@ require('toggler').setup({
 })
 ```
 
+> The plugin does not come with any default commands or configuration, you must
+> pass commands to toggle.
+
 ## Development
 
 To load the plugin from a local environment for development, add this to your `init.lua`:
@@ -86,7 +98,7 @@ vim.opt.runtimepath:prepend("/path/to/your/toggler.nvim")
 Tests can be run using the `vusted` framework:
 
 ```shell
-vusted --nvim /path/to/neovim test/
+vusted test
 ```
 
 ## CI
