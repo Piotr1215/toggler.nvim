@@ -91,4 +91,6 @@ vusted --nvim /path/to/neovim test/
 
 ## CI
 
-Continuous Integration setup includes generating Neovim help docs automatically from the
+Continuous Integration setup includes generating Neovim help docs automatically
+from the plugin's README.md file. This is done using the `vimdoc` tool. Ci also
+runs tests.
