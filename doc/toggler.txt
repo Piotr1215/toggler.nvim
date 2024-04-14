@@ -1,92 +1,131 @@
-*yanksearch.txt*         For NVIM v0.8.0        Last change: 2023 September 29
+*toggler.txt*            For NVIM v0.8.0            Last change: 2024 April 14
 
 ==============================================================================
-Table of Contents                               *yanksearch-table-of-contents*
+Table of Contents                                  *toggler-table-of-contents*
 
-1. Yank Search Registry                      |yanksearch-yank-search-registry|
-  - Installation                |yanksearch-yank-search-registry-installation|
-  - Usage                              |yanksearch-yank-search-registry-usage|
-  - Configuration              |yanksearch-yank-search-registry-configuration|
-  - Test                                |yanksearch-yank-search-registry-test|
-  - Ci                                    |yanksearch-yank-search-registry-ci|
-  - License MIT                  |yanksearch-yank-search-registry-license-mit|
+1. Toggler.nvim                                         |toggler-toggler.nvim|
+  - Installation                           |toggler-toggler.nvim-installation|
+  - Usage                                         |toggler-toggler.nvim-usage|
+  - Configuration                         |toggler-toggler.nvim-configuration|
+  - Development                             |toggler-toggler.nvim-development|
+  - Test                                           |toggler-toggler.nvim-test|
+  - CI                                               |toggler-toggler.nvim-ci|
 
 ==============================================================================
-1. Yank Search Registry                      *yanksearch-yank-search-registry*
+1. Toggler.nvim                                         *toggler-toggler.nvim*
 
-This is a super simple plugin that checks the search registry `/` and runs the
-search again for the search phrase and creates a dedicated buffer with the
-output.
+This plugin provides a flexible way to dynamically toggle commands in Neovim,
+such as linters or formatters, based on user-configurable keybindings and
+events. It’s especially useful for developers who need to quickly enable or
+disable tools without leaving their editor environment.
 
-It is useful for quick text manipulation on the search output.
 
-
-INSTALLATION                    *yanksearch-yank-search-registry-installation*
+INSTALLATION                               *toggler-toggler.nvim-installation*
 
 
 USING VIM-PLUG ~
 
 >vim
-    Plug 'piotr1215/yanksearch.nvim'
+    Plug 'yourusername/toggler.nvim'
 <
 
 
 USING PACKER.NVIM ~
 
 >lua
-    use 'piotr1215/yanksearch.nvim'
+    use 'yourusername/toggler.nvim'
 <
 
 
-USAGE                                  *yanksearch-yank-search-registry-usage*
+USAGE                                             *toggler-toggler.nvim-usage*
 
-To use the plugin, simply type `:YankMatchingLines` after performing a search.
+To toggle a tool, configure your `init.lua` to set up the specific commands you
+want to toggle along with their associated keybindings and optional events.
+Here’s how to set it up:
+
+
+BASIC CONFIGURATION ~
+
+>lua
+    require('toggler').setup({
+        {
+            name = "Vale",
+            cmd = "Vale",
+            key = "<leader>vl",
+            pattern = "*.md",
+            event = "BufWritePost"  -- This is optional; default is 'BufWritePost'
+        },
+        {
+            name = "ESLint",
+            cmd = "Eslint --fix",
+            key = "<leader>el",
+            pattern = "*.js",
+            event = "TextChanged,TextChangedI"  -- Trigger on text change
+        }
+    })
+<
+
+This configuration will: - Toggle Vale on Markdown files with `<leader>vl` on
+buffer write post. - Toggle ESLint on JavaScript files with `<leader>el` on
+text changes.
+
+
+COMMANDS ~
+
+To manually toggle a command without a keybinding, use:
+
+>vim
+    :ToggleCommand name Vale cmd "Vale" pattern "*.md"
+<
 
 
 DEPENDENCIES ~
 
-Neovim 0.5 or higher
+Neovim 0.5 or higher is required due to the use of advanced Lua features.
 
 
-CONFIGURATION                  *yanksearch-yank-search-registry-configuration*
+CONFIGURATION                             *toggler-toggler.nvim-configuration*
 
-As of the latest update, the plugin supports configuration options. You can
-specify the number of lines above, below, or around the matching line to be
-yanked as well.
-
-Here’s an example:
+The plugin is highly configurable. Below is an example to customize the
+toggler:
 
 >lua
-    require('yanksearch').setup({
-        lines_above = 1,
-        lines_below = 1,
-        lines_around = 0,
-    })
-<
-
-The plugin defaults to:
-
->lua
-    require('yanksearch').setup({
-        lines_above = 0,
-        lines_below = 0,
-        lines_around = 0,
+    require('toggler').setup({
+        {
+            name = "MyLinter",
+            cmd = "mylinter --fix",
+            key = "<leader>ml",
+            pattern = "*.py",
+            event = "BufEnter"  -- Trigger on entering the buffer
+        }
     })
 <
 
 
-TEST                                    *yanksearch-yank-search-registry-test*
+DEVELOPMENT                                 *toggler-toggler.nvim-development*
 
-Tests are run with `vusted test`.
+To load the plugin from a local environment for development, add this to your
+`init.lua`:
+
+>lua
+    vim.opt.runtimepath:prepend("/path/to/your/toggler.nvim")
+<
 
 
-CI                                        *yanksearch-yank-search-registry-ci*
+TEST                                               *toggler-toggler.nvim-test*
 
-Ci auto generates neovim help doc from README, so it’s possible to run `h
-yanksearch`
+Tests can be run using the `vusted` framework:
+
+>shell
+    vusted --nvim /path/to/neovim test/
+<
 
 
-LICENSE MIT                      *yanksearch-yank-search-registry-license-mit*
+CI                                                   *toggler-toggler.nvim-ci*
+
+Continuous Integration setup includes generating Neovim help docs automatically
+from the plugin’s README.md file. This is done using the `vimdoc` tool. Ci
+also runs tests.
 
 Generated by panvimdoc <https://github.com/kdheepak/panvimdoc>
 
