@@ -1,4 +1,4 @@
-*toggler.txt*            For NVIM v0.8.0            Last change: 2025 March 03
+*toggler.txt*           For NVIM v0.8.0           Last change: 2025 October 07
 
 ==============================================================================
 Table of Contents                                  *toggler-table-of-contents*
